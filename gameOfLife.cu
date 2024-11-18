@@ -84,8 +84,8 @@ void printBoard(int* board, int startRow = 0, int startCol = 0, int rows = 10, i
 
 int main() {
     unsigned long n = 1024;
-    dim3 dimGrid(64,64);
-    dim3 dimBlock(16,16);
+    dim3 dimGrid(n/BLOCK_SIZE,n/BLOCK_SIZE);
+    dim3 dimBlock(BLOCK_SIZE,BLOCK_SIZE);
     
 
     int *A = (int*) malloc(sizeof(int)*n*n);
