@@ -42,6 +42,7 @@
         "xstring": "c",
         "xtr1common": "c",
         "xutility": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "string.h": "c"
     }
 }

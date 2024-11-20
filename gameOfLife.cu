@@ -80,22 +80,96 @@ void printBoard(int* board, int startRow = 0, int startCol = 0, int rows = 10, i
     std::cout << std::endl;
 }
 
+void parseMatrix(const char *filename, int **matrix, int *rows, int *cols) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
+    }
+
+    // Read the file into a buffer
+    fseek(file, 0, SEEK_END);
+    long length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *buffer = (char *)malloc(length + 1);
+    if (!buffer) {
+        perror("Error allocating memory");
+        fclose(file);
+        exit(EXIT_FAILURE);
+    }
+    fread(buffer, 1, length, file);
+    buffer[length] = '\0';
+    fclose(file);
+
+    // Variables to track dimensions
+    *rows = 0;
+    *cols = 0;
+
+    // First pass: Determine the matrix dimensions
+    int firstRow = 1;
+    for (int i = 0; buffer[i] != '\0'; ++i) {
+        if (buffer[i] == '[' && buffer[i + 1] != '[') {
+            (*rows)++;
+            if (firstRow) {
+                // Count the number of columns in the first row
+                for (int j = i + 1; buffer[j] != ']'; ++j) {
+                    if (buffer[j] == ',') {
+                        (*cols)++;
+                    }
+                }
+                (*cols)++; // Account for the last column
+                firstRow = 0;
+            }
+        }
+    }
+
+    printf("Parsing 1D Matrix %d x %d\n", *rows, *cols);
+
+    // Allocate memory for the 1D matrix
+    *matrix = (int *)malloc((*rows) * (*cols) * sizeof(int));
+    if (!(*matrix)) {
+        perror("Error allocating memory for matrix");
+        free(buffer);
+        exit(EXIT_FAILURE);
+    }
+
+    // Second pass: Parse and store values in the matrix
+    int index = 0;
+    for (int i = 0; buffer[i] != '\0'; ++i) {
+        if (isdigit(buffer[i])) {
+            (*matrix)[index++] = buffer[i] - '0'; // Convert char to int
+        }
+    }
+
+    free(buffer);
+}
 
 
-int main() {
+
+int main(int argc, char *argv[]) {
     unsigned long n = 1024;
     dim3 dimGrid(n/BLOCK_SIZE,n/BLOCK_SIZE);
     dim3 dimBlock(BLOCK_SIZE,BLOCK_SIZE);
     
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
 
-    int *A = (int*) malloc(sizeof(int)*n*n);
+    int *A;
+    int rows = 0;
+    int cols = 0;
+    parseMatrix(argv[1], &A, &rows, &cols);
+
+    // int *A = (int*) malloc(sizeof(int)*n*n);
     int *B = (int*) malloc(sizeof(int)*n*n);
     
     // Initialize array
     int i,j;
     for (i=0; i<n; i++){
         for(j=0; j< n; j++){
-            A[i*n + j]=i%2;
+            // A[i*n + j]=i%2;
             B[i*n + j]=0;  
         }   
     }   
