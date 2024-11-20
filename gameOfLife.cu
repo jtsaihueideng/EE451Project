@@ -2,7 +2,7 @@
 #include <cuda.h>
 #include <ctime>
 
-#define BLOCK_SIZE 16  // Define BLOCK_SIZE for flexible grid size
+#define BLOCK_SIZE 32  // Define BLOCK_SIZE for flexible grid size
 
 __global__ void gameOfLife(int* A, int* B) {
     int n = 1024;

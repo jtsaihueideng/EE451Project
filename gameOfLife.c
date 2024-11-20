@@ -141,13 +141,17 @@ int main(int argc, char *argv[]) {
     struct timespec start, stop; 
     double time;
     if( clock_gettime(CLOCK_REALTIME, &start) == -1) { perror("clock gettime");}
-
-    gameOfLife(A, B, n, n);
+    int nGen = 10;
+    for(int i = 0; i < nGen; i++){
+        gameOfLife(A, B, n, n);
+        memcpy(A, B, sizeof(int)*rows*cols);
+    }
+    
 
     if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) { perror("clock gettime");}		
-	time = (stop.tv_sec - start.tv_sec)+ (double)(stop.tv_nsec - start.tv_nsec);
+	time = (stop.tv_sec - start.tv_sec)+ (double)(stop.tv_nsec - start.tv_nsec) / 1e9;
 	
-    printf("Execution time = %f ns\n", time);	
+    printf("Execution time = %f s\n", time);	
     //printBoard(A, n, n);	
 
     return 0;
