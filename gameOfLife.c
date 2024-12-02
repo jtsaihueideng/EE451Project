@@ -20,9 +20,9 @@ void gameOfLife(int* board, int* nBoard, int rows, int cols) {
 
                 // Check if the new position is within bounds
                 if (new_i >= 0 && new_i < rows && new_j >= 0 && new_j < cols) {
-                    if (board[new_i * cols + new_j] == 1) {
-                        live_neighbors++;
-                    }
+                    //if (board[new_i * cols + new_j] == 1) {
+                        live_neighbors+=board[new_i * cols + new_j];
+                    //}
                 }
             }
 
