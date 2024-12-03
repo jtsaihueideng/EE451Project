@@ -20,24 +20,32 @@ __global__ void gameOfLife(int* A, int* B) {
         sharedA[localRow][localCol] = A[row * n + col];
         
         
-        if (threadIdx.y == 0 && row > 0) 
-            sharedA[0][localCol] = A[(row - 1) * n + col];  // Top neighbor
-        if (threadIdx.y == BLOCK_SIZE - 1 && row < n - 1) 
-            sharedA[BLOCK_SIZE + 1][localCol] = A[(row + 1) * n + col];  // Bottom neighbor
-        if (threadIdx.x == 0 && col > 0) 
-            sharedA[localRow][0] = A[row * n + (col - 1)];  // Left neighbor
-        if (threadIdx.x == BLOCK_SIZE - 1 && col < n - 1) 
-            sharedA[localRow][BLOCK_SIZE + 1] = A[row * n + (col + 1)];  // Right neighbor
+        if (threadIdx.y == 0 && row > 0) {
+            sharedA[0][localCol] = A[(row - 1) * n + col];
+        }
+        if (threadIdx.y == BLOCK_SIZE - 1 && row < n - 1) {
+            sharedA[BLOCK_SIZE + 1][localCol] = A[(row + 1) * n + col];
+        }
+        if (threadIdx.x == 0 && col > 0) {
+            sharedA[localRow][0] = A[row * n + (col - 1)];
+        }
+        if (threadIdx.x == BLOCK_SIZE - 1 && col < n - 1) {
+            sharedA[localRow][BLOCK_SIZE + 1] = A[row * n + (col + 1)];
+        }
 
         // Load corner halo cells only if within bounds
-        if (threadIdx.x == 0 && threadIdx.y == 0 && row > 0 && col > 0) 
+        if (threadIdx.x == 0 && threadIdx.y == 0 && row > 0 && col > 0) {
             sharedA[0][0] = A[(row - 1) * n + (col - 1)];  // Top-left corner
-        if (threadIdx.x == BLOCK_SIZE - 1 && threadIdx.y == 0 && row > 0 && col < n - 1) 
-            sharedA[0][BLOCK_SIZE + 1] = A[(row - 1) * n + (col + 1)];  // Top-right corner
-        if (threadIdx.x == 0 && threadIdx.y == BLOCK_SIZE - 1 && row < n - 1 && col > 0) 
-            sharedA[BLOCK_SIZE + 1][0] = A[(row + 1) * n + (col - 1)];  // Bottom-left corner
-        if (threadIdx.x == BLOCK_SIZE - 1 && threadIdx.y == BLOCK_SIZE - 1 && row < n - 1 && col < n - 1) 
-            sharedA[BLOCK_SIZE + 1][BLOCK_SIZE + 1] = A[(row + 1) * n + (col + 1)];  // Bottom-right corner
+        }           
+        if (threadIdx.x == BLOCK_SIZE - 1 && threadIdx.y == 0 && row > 0 && col < n - 1) {
+            sharedA[0][BLOCK_SIZE + 1] = A[(row - 1) * n + (col + 1)];
+        }
+        if (threadIdx.x == 0 && threadIdx.y == BLOCK_SIZE - 1 && row < n - 1 && col > 0) {
+            sharedA[BLOCK_SIZE + 1][0] = A[(row + 1) * n + (col - 1)]; 
+        }
+        if (threadIdx.x == BLOCK_SIZE - 1 && threadIdx.y == BLOCK_SIZE - 1 && row < n - 1 && col < n - 1) {
+            sharedA[BLOCK_SIZE + 1][BLOCK_SIZE + 1] = A[(row + 1) * n + (col + 1)];
+        }
     }
     __syncthreads();
 
@@ -46,14 +54,30 @@ __global__ void gameOfLife(int* A, int* B) {
         int liveNeighbors = 0;
 
         // Sum live neighbors, accounting for edges
-        if (localRow > 0 && localCol > 0) liveNeighbors += sharedA[localRow - 1][localCol - 1];  // Top-left
-        if (localRow > 0) liveNeighbors += sharedA[localRow - 1][localCol];  // Top
-        if (localRow > 0 && localCol < BLOCK_SIZE + 1) liveNeighbors += sharedA[localRow - 1][localCol + 1];  // Top-right
-        if (localCol > 0) liveNeighbors += sharedA[localRow][localCol - 1];  // Left
-        if (localCol < BLOCK_SIZE + 1) liveNeighbors += sharedA[localRow][localCol + 1];  // Right
-        if (localRow < BLOCK_SIZE + 1 && localCol > 0) liveNeighbors += sharedA[localRow + 1][localCol - 1];  // Bottom-left
-        if (localRow < BLOCK_SIZE + 1) liveNeighbors += sharedA[localRow + 1][localCol];  // Bottom
-        if (localRow < BLOCK_SIZE + 1 && localCol < BLOCK_SIZE + 1) liveNeighbors += sharedA[localRow + 1][localCol + 1];  // Bottom-right
+        if (localRow > 0 && localCol > 0) {
+            liveNeighbors += sharedA[localRow - 1][localCol - 1];  // Top-left
+        }
+        if (localRow > 0) {
+            liveNeighbors += sharedA[localRow - 1][localCol];  // Top
+        }
+        if (localRow > 0 && localCol < BLOCK_SIZE + 1) {
+            liveNeighbors += sharedA[localRow - 1][localCol + 1];  // Top-right
+        }
+        if (localCol > 0) {
+            liveNeighbors += sharedA[localRow][localCol - 1];  // Left
+        }
+        if (localCol < BLOCK_SIZE + 1) {
+            liveNeighbors += sharedA[localRow][localCol + 1];  // Right
+        }
+        if (localRow < BLOCK_SIZE + 1 && localCol > 0) {
+            liveNeighbors += sharedA[localRow + 1][localCol - 1];  // Bottom-left
+        }
+        if (localRow < BLOCK_SIZE + 1) {
+            liveNeighbors += sharedA[localRow + 1][localCol];  // Bottom
+        }
+        if (localRow < BLOCK_SIZE + 1 && localCol < BLOCK_SIZE + 1) {
+            liveNeighbors += sharedA[localRow + 1][localCol + 1];  // Bottom-right
+        }
 
         int currentState = sharedA[localRow][localCol];
         int nextState;
