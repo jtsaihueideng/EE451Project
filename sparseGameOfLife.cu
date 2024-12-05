@@ -5,9 +5,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#define MAX_LIVE_CELLS 1000000  // Adjust as needed for maximum expected live cells
-#define BLOCK_SIZE 256          // Define BLOCK_SIZE for CUDA threads per block
-
+#define MAX_LIVE_CELLS 1000000   // Assume this is max  
+#define BLOCK_SIZE 32          // Can be changed
 typedef struct {
     int row;
     int col;
@@ -199,7 +198,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Usage: %s <filename> [generations]\n", argv[0]);
         return EXIT_FAILURE;
     }
-
+    
     int rows = 0;
     int cols = 0;
     int numLiveCells = 0;
