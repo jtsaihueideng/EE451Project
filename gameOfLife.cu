@@ -207,6 +207,9 @@ int main(int argc, char *argv[]) {
     double time;
         
     int nGenerations = 1;
+    if (argc >= 3) {
+        nGenerations = atoi(argv[2]);
+    }
     printBoard(A);
     
     if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) { perror( "clock gettime" );}

@@ -14,6 +14,7 @@ module load gcc/11.3.0
 module load cuda/11.5.1
 
 nvcc -o sparseGameOfLife sparseGameOfLife.cu
+nvcc -o gameOfLife gameOfLife.cu
 
 ./sparseGameOfLife inputs/sparse.txt 1
 ./sparseGameOfLife inputs/sparse.txt 10
@@ -21,3 +22,8 @@ nvcc -o sparseGameOfLife sparseGameOfLife.cu
 ./sparseGameOfLife inputs/sparse.txt 1000
 ./sparseGameOfLife inputs/sparse.txt 10000
 
+./gameOfLife inputs/sparse.txt 1
+./gameOfLife inputs/sparse.txt 10
+./gameOfLife inputs/sparse.txt 100
+./gameOfLife inputs/sparse.txt 1000
+./gameOfLife inputs/sparse.txt 10000
