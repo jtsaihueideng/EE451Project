@@ -19,7 +19,7 @@ For the dense dataset, replace sparse.txt with dense.txt.
 
 ### Parallel Implementation
 
-The parallel implementation optimized for dense datasets is written in the gameOfLife.cu file. It contains the parallelized code testing on different block sizes. If you want to test on a different block size, you can change the BLOCK_SIZE constant in the code. If you would like to try on different generations, change the nGenerations variable. The commands with the line arguments are written in the job.sl file. You can uncomment specific lines to test the code on different datasets. For this implementation, we ran it on USC's CARC HPC.
+The parallel implementation optimized for dense datasets is written in the gameOfLife.cu file. It contains the parallelized code testing on different block sizes. If you want to test on a different block size, you can change the BLOCK_SIZE constant in the code. If you would like to try on different generations, you can either change the nGenerations variable or add the generations value as a command line argument after the dataset file name. The commands with the line arguments are written in the job.sl file. You can uncomment specific lines to test the code on different datasets. For this implementation, we ran it on USC's CARC HPC.
 
 Use the following commands to compile and run the program for the parallel implementation. The execution time will be printed in the gpujob.out file.
 
