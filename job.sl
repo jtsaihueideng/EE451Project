@@ -12,4 +12,4 @@ module purge
 module load nvidia-hpc-sdk
 
 # ./gameOfLife inputs/dense.txt 10
-./sparseGameOfLifeV2 inputs/sparse.txt 10
+./gameOfLife inputs/sparse.txt 10
