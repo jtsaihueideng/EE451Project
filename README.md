@@ -30,6 +30,7 @@ The parallel implementation optimized for dense datasets is written in the gameO
 Use the following commands to compile and run the program for the parallel implementation. The execution time will be printed in the gpujob.out file.
 
 ```
+module load cuda/11.6.2
 nvcc -o gameOfLife gameOfLife.cu
 sbatch job.sl
 ```
